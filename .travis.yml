@@ -1,0 +1,7 @@
+language: ruby
+rvm:
+  - 1.9.2
+  - 1.9.3
+before_script: 
+  - sudo wget http://www.louismullie.com/treat/open-nlp-minimal.zip
+  - sudo unzip -o open-nlp-minimal.zip -d bin/
