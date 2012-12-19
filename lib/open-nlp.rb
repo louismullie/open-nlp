@@ -33,7 +33,7 @@ module OpenNLP
   ]
   
   # Default namespace.
-  self.default_namespace = 'opennlp.tools.'
+  self.default_namespace = 'opennlp.tools'
   
   # Default classes.
   self.default_classes = [
@@ -158,4 +158,5 @@ module OpenNLP
   def self.last_name(klass)
     klass.to_s.split('::')[-1]
   end
+  
 end
