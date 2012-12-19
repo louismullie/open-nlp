@@ -15,7 +15,7 @@ This gem only provides a thin wrapper over the OpenNLP API. If you are looking f
 
 First, install the gem: `gem install open-nlp`. Then, individually download the appropriate models from the [open-nlp website](http://opennlp.sourceforge.net/models-1.5/) or just get [all english language models](louismullie.com/treat/open-nlp-english.zip) in one package (80 MB).
 
-Place the contents of the extracted archive inside the /bin/ folder of the stanford-core-nlp gem (e.g. [...]/gems/open-nlp-0.x.x/bin/).
+Place the contents of the extracted archive inside the /bin/ folder of the open-nlp gem (e.g. [...]/gems/open-nlp-0.x.x/bin/).
 
 **Configuration**
 
@@ -43,7 +43,7 @@ OpenNLP.log_file = 'log.txt'
 # OpenNLP.use(:french) # or :german
 # 
 # Change a specific model file.
-# StanfordCoreNLP.set_model('pos.model', 'english-left3words-distsim.tagger')
+# OpenNLP.set_model('pos.model', 'english-left3words-distsim.tagger')
 ```
 
 **Using the gem**
