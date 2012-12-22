@@ -1,12 +1,33 @@
 require 'open-nlp/base'
 
-class OpenNLP::SentenceDetectorME < OpenNLP::Base; end
+class OpenNLP::SentenceDetectorME < OpenNLP::Base
+  unless RUBY_PLATFORM =~ /java/
+    def sent_detect(*args)
+      invoke_with_sig(:sent_detect, args)
+    end
+  end
+end
 
 class OpenNLP::SimpleTokenizer < OpenNLP::Base; end
 
-class OpenNLP::TokenizerME < OpenNLP::Base; end
+class OpenNLP::TokenizerME < OpenNLP::Base
+  unless RUBY_PLATFORM =~ /java/
+    def tokenize(*args)
+      invoke_with_sig(:tokenize, args)
+    end
+  end
+end
 
-class OpenNLP::POSTaggerME < OpenNLP::Base; end
+class OpenNLP::POSTaggerME < OpenNLP::Base
+    
+  unless RUBY_PLATFORM =~ /java/
+    def tag(*args)
+      OpenNLP::Bindings::Utils
+      .tagWithArrayList(@proxy_inst, args[0])
+    end
+  end
+  
+end
 
 class OpenNLP::ChunkerME < OpenNLP::Base
 
@@ -60,4 +81,11 @@ class OpenNLP::Parser < OpenNLP::Base
 
 end
 
-class OpenNLP::NameFinderME < OpenNLP::Base; end
+class OpenNLP::NameFinderME < OpenNLP::Base
+  unless RUBY_PLATFORM =~ /java/
+    def find(*args)
+      OpenNLP::Bindings::Utils
+      .findWithArrayList(@proxy_inst, args[0])
+    end
+  end
+end

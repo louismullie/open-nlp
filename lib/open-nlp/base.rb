@@ -36,32 +36,10 @@ class OpenNLP::Base
     @proxy_inst.send(sym, *args, &block)
   end
   
-  unless RUBY_PLATFORM =~ /java/
-
-    def invoke_with_sig(sym, args)
-      @proxy_inst._invoke(sym.to_s, 'Ljava.lang.String;', *args)
-    end
-
-    def tokenize(*args)
-      invoke_with_sig(:tokenize, args)
-    end
-
-    def sent_detect(*args)
-      invoke_with_sig(:sent_detect, args)
-    end
-
-    def tag(*args)
-      OpenNLP::Bindings::Utils
-      .tagWithArrayList(@proxy_inst, args[0])
-    end
-
-    def find(*args)
-      OpenNLP::Bindings::Utils
-      .findWithArrayList(@proxy_inst, args[0])
-    end
-
+  def invoke_with_sig(sym, args)
+    @proxy_inst._invoke(sym.to_s, 'Ljava.lang.String;', *args)
   end
-
+  
   protected
 
   def get_list(tokens)
