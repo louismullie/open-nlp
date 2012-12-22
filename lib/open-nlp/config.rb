@@ -17,7 +17,7 @@ module OpenNLP::Config
     'DocumentCategorizerME' => :categorizer,
     'NameFinderME' => :name_finder,
     'POSTaggerME' => :pos_tagger,
-    'ParserME' => :parser,
+    'Parser' => :parser,
     'SentenceDetectorME' => :sentence_detector,
     'TokenizerME' => :tokenizer,
   }
@@ -48,7 +48,7 @@ module OpenNLP::Config
   # Classes that require a model as first argument to constructor.
   RequiresModel = [
     'SentenceDetectorME', 'NameFinderME', 'DictionaryDetokenizer',
-    'TokenizerME', 'ChunkerME', 'POSTaggerME'
+    'TokenizerME', 'ChunkerME', 'POSTaggerME', 'Parser'
   ]
 
   
