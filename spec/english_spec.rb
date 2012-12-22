@@ -15,6 +15,26 @@ describe OpenNLP do
     end
   end
   
+  context "when a constructor is provided with a specific model to load" do
+    it "loads that model, looking for the supplied file relative to OpenNLP.model_path " do
+      
+      OpenNLP.load
+      
+      tokenizer = OpenNLP::TokenizerME.new('en-token.bin')
+      tagger = OpenNLP::POSTaggerME.new('en-pos-perceptron.bin')
+
+      sent = "The death of the poet was kept from his poems."
+      tokens = tokenizer.tokenize(sent)
+      tags = tagger.tag(tokens)
+      
+      OpenNLP.models[:pos_tagger].get_pos_model.to_s
+      .index('opennlp.perceptron.PerceptronModel').should_not be_nil
+      
+      tags.should eql ["DT", "NN", "IN", "DT", "NN", "VBD", "VBN", "IN", "PRP$", "NNS", "."]
+
+    end
+  end
+
   context "when a class is loaded through the #load_class method" do
     it "loads the class and allows to access it through the global namespace" do
       OpenNLP.load_class('ChunkSample', 'opennlp.tools.chunker')
