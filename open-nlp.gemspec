@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files = Dir['bin/**/*'] + Dir['lib/**/*'] + Dir['spec/**/*'] +  ['README.md', 'LICENSE']
   
   # Runtime dependency.
-  s.add_runtime_dependency 'bind-it'
+  s.add_runtime_dependency 'bind-it', '~>0.2.4'
   
   # Development dependency.
   s.add_development_dependency 'rspec'
