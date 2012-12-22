@@ -1,7 +1,14 @@
-language: ruby
+language: ruby 
 rvm:
   - 1.9.2
   - 1.9.3
+  - jruby-19mode
+before_install:
+  - export "JAVA_HOME=/usr/lib/jvm/java-6-openjdk-i386"
+  - export "JRUBY_OPTS=--1.9"
+  - gem install bind-it
 before_script: 
-  - sudo wget http://www.louismullie.com/treat/open-nlp-minimal.zip
-  - sudo unzip -o open-nlp-minimal.zip -d bin/
+  - sudo wget http://www.louismullie.com/treat/open-nlp-english.zip
+  - sudo unzip -o open-nlp-english.zip -d bin/
+script:
+  - rake spec
