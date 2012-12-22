@@ -3,7 +3,7 @@ $:.push File.expand_path('../lib', __FILE__)
 require 'open-nlp'
 
 Gem::Specification.new do |s|
-  
+
   s.name        = 'open-nlp'
   s.version     = OpenNLP::VERSION
   s.authors     = ['Louis Mullie']
@@ -17,5 +17,8 @@ Gem::Specification.new do |s|
   
   # Runtime dependency.
   s.add_runtime_dependency 'bind-it'
+  
+  # Development dependency.
+  s.add_development_dependency 'rspec'
   
 end
