@@ -97,10 +97,6 @@ module OpenNLP::Bindings
     self.language = language
   end
 
-  def self.set_model
-    # Implement
-  end
-
   def self.get_model(klass, file=nil)
     name = OpenNLP::Config::ClassToName[klass]
     if !self.language and !file
@@ -111,6 +107,10 @@ module OpenNLP::Bindings
     end
     self.load_model(name, file)
     model = self.models[name]
+  end
+
+  def self.set_model
+    raise 'Not implemented.'
   end
 
   def self.load_model(name, file = nil)
