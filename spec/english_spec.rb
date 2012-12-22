@@ -3,7 +3,6 @@ require_relative 'spec_helper'
 
 describe OpenNLP do
 
-  # Failing spec #1
   context "the maximum entropy chunker is run after tokenization and POS tagging" do
     it "should find the accurate chunks" do
       
@@ -15,28 +14,39 @@ describe OpenNLP do
       tokens = tokenizer.tokenize(sent)
       tags   = tagger.tag(tokens)
       
-      chunks = chunker.chunk(tokens.to_java(:String), pos_tags.to_java(:String))
-      # cannot convert instance of class org.jruby.java.proxies.ArrayJavaProxy to class java.lang.String
-      
+      chunks = chunker.chunk(tokens, tags)
+
+      chunks.to_a.should eql %w[B-NP I-NP B-PP B-NP I-NP B-VP I-VP B-PP B-NP I-NP O]
       tokens.to_a.should eql %w[The death of the poet was kept from his poems .]
-      tags.should eql ['put tags here']
+      tags.to_a.should eql %w[DT NN IN DT NN VBD VBN IN PRP$ NNS .]
       
     end
   end
 
-  # Failing spec #2
   context "the maximum entropy parser is run after tokenization" do
     it "parses the text accurately" do
+
       sent      = "The death of the poet was kept from his poems."
-      tokenizer = OpenNLP::TokenizerME.new
-      p_model   = OpenNLP.load_model(:parser)
-      parser    = OpenNLP::ParserFactory.create(p_model)
-      tokens = tokenizer.tokenize(sent)
-      result = parser.parse(tokens.to_java(:String))
-      # cannot convert instance of class org.jruby.java.proxies.ArrayJavaProxy to class java.lang.String
-      # org/jruby/java/addons/KernelJavaAddons.java:70:in `to_java'
-      # /ruby/gems/open-nlp/spec/english_spec.rb in `(root)'
-      puts result.to_a.inspect
+      parser = OpenNLP::Parser.new
+      parse = parser.parse(sent)
+
+      parse.get_text.should eql sent
+
+      parse.get_span.get_start.should eql 0
+      parse.get_span.get_end.should eql 46
+      parse.get_span.get_type.should eql nil # ?
+      parse.get_child_count.should eql 1
+
+      child = parse.get_children[0]
+
+      child.text.should eql "The death of the poet was kept from his poems."
+      child.chunk.should eql false
+      child.get_child_count.should eql 3
+      child.get_head_index.should eql 5
+
+      child.get_head.get_child_count.should eql 1
+      child.get_type.should eql "S"
+
     end
   end
 
