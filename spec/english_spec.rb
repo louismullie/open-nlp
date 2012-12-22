@@ -2,9 +2,31 @@
 require_relative 'spec_helper'
 
 describe OpenNLP do
+  
+  context "when an unreachable jar_path or model_path is provided" do
+    it "raises an exception when trying to load" do
+      OpenNLP.jar_path = '/unreachable/'
+      OpenNLP::Bindings.jar_path.should eql '/unreachable/'
+      OpenNLP.model_path = '/unreachable/'
+      OpenNLP::Bindings.model_path.should eql '/unreachable/'
+      expect { OpenNLP.load }.to raise_exception
+      OpenNLP.jar_path = OpenNLP.model_path = OpenNLP.default_path
+      expect { OpenNLP.load }.not_to raise_exception
+    end
+  end
+  
+  context "when a class is loaded through the #load_class method" do
+    it "loads the class and allows to access it through the global namespace" do
+      OpenNLP.load_class('AbstractBottomUpParser', 'opennlp.tools.parser')
+      expect { OpenNLP::AbstractBottomUpParser }.not_to raise_exception
+    end
+  end
+
 
   context "the maximum entropy chunker is run after tokenization and POS tagging" do
     it "should find the accurate chunks" do
+      
+      OpenNLP.load
       
       chunker   = OpenNLP::ChunkerME.new
       tokenizer = OpenNLP::TokenizerME.new
@@ -25,7 +47,9 @@ describe OpenNLP do
 
   context "the maximum entropy parser is run after tokenization" do
     it "parses the text accurately" do
-
+      
+      OpenNLP.load
+      
       sent      = "The death of the poet was kept from his poems."
       parser = OpenNLP::Parser.new
       parse = parser.parse(sent)
@@ -51,10 +75,14 @@ describe OpenNLP do
 
   context "the SimpleTokenizer is run" do
     it "tokenizes the text accurately" do
+      
+      OpenNLP.load
+      
       sent = "The death of the poet was kept from his poems."
       tokenizer = OpenNLP::SimpleTokenizer.new
       tokens = tokenizer.tokenize(sent).to_a
       tokens.should eql %w[The death of the poet was kept from his poems .]
+      
     end
   end
 
@@ -63,6 +91,8 @@ describe OpenNLP do
 
     it "should accurately detect tokens, sentences and named entities" do
 
+      OpenNLP.load
+      
       text = File.read('./spec/sample.txt').gsub!("\n", "")
       
       tokenizer   = OpenNLP::TokenizerME.new
@@ -96,6 +126,7 @@ describe OpenNLP do
         all_tokens << tokens.to_a
         all_sentences << sentence
         all_tags << tags.to_a
+        
       end
 
       all_tokens.should eql [["To", "describe", "2009", "as", "a", "stellar", "year", "for", "Petrofac", "(", "LON:PFC)", "would", "be", "a", "huge", "understatement", "."], ["The", "group", "finished", "the", "year", "with", "an", "order", "backlog", "twice", "the", "size", "than", "it", "had", "at", "the", "outset", "."], ["The", "group", "has", "since", "been", "awarded", "a", "US", "600", "million", "contract", "and", "spun", "off", "its", "North", "Sea", "assets", "."], ["The", "group", "’s", "recently", "released", "full", "year", "results", "show", "a", "jump", "in", "revenues", ",", "pre-tax", "profits", "and", "order", "backlog", "."], ["Whilst", "group", "revenue", "rose", "by", "10", "%", "from", "$", "3.3", "billion", "to", "$", "3.7", "billion", ",", "pre-tax", "profits", "rose", "by", "25", "%", "from", "$", "358", "million", "to", "$", "448", "million", ".All", "the", "more", "impressive", ",", "the", "group", "’s", "order", "backlog", "doubled", "to", "over", "$", "8", "billion", "paying", "no", "attention", "to", "the", "15", "%", "cut", "in", "capital", "expenditure", "witnessed", "across", "the", "oil", "and", "gas", "industry", "as", "whole", "in", "2009", ".Focussing", "in", "on", "which", "the", "underlying", "performances", "of", "the", "individual", "segments", ",", "the", "group", "cash", "cow", ",", "its", "Engineering", "and", "Construction", "division", ",", "saw", "operating", "profit", "rise", "33", "%", "over", "the", "year", "to", "$", "322", "million", ",", "thanks", "to", "US$", "6.3", "billion", "worth", "of", "new", "contract", "wins", "during", "the", "year", "which", "included", "a", "$", "100", "million", "contract", "with", "Turkmengaz", ",", "the", "Turkmenistan", "national", "energy", "company", "."], ["The", "division", "has", "picked", "up", "in", "2010", "where", "it", "left", "off", "in", "2009", "and", "has", "been", "awarded", "a", "contract", "worth", "more", "than", "US600", "million", "for", "a", "gas", "sweetening", "facilities", "project", "by", "Qatar", "Petroleum.Elsewhere", "the", "group", "’s", "Offshore", "Engineering", "&", "Operations", "division", "may", "have", "seen", "a", "pullback", "in", "revenue", "and", "earnings", "vis-a-vis", "2008", ",", "but", "it", "did", "secure", "a", "£75", "million", "contract", "with", "Apache", "to", "provideengineering", "and", "construction", "services", "for", "the", "Forties", "field", "in", "the", "UK", "North", "Sea", "."], ["And", "to", "underscore", "the", "fact", "that", "there", "is", "life", "beyond", "NOC’s", "for", "Petrofac", "(", "LON:PFC)", "the", "division", "was", "awarded", "a", "£100", "million", "5-year", "contract", "by", "BP", "(", "LON:BP.", ")", "to", "deliver", "integrated", "maintenance", "management", "support", "services", "for", "all", "of", "BP", "'s", "UK", "offshore", "assets", "and", "onshore", "Dimlington", "plant", "."], ["The", "laggard", "of", "the", "group", "was", "the", "Engineering", ",", "Training", "Services", "and", "Production", "Solutions", "division", "."], ["The", "business", "suffered", "as", "the", "oil", "price", "tailed", "off", "and", "the", "economic", "outlook", "deteriorated", "forcing", "a", "number", "ofmajor", "customers", "to", "postpone", "early", "stage", "engineering", "studies", "or", "re-phased", "work", "upon", "which", "the", "division", "depends", "."], ["Although", "the", "fall", "in", "activity", "was", "notable", ",", "the", "division’s", "operational", "performance", "in", "service", "operator", "role", "for", "production", "of", "Dubai", "'s", "offshore", "oil", "&", "gas", "proved", "a", "highlight.Energy", "Developments", "meanwhile", "saw", "the", "start", "of", "oil", "production", "from", "the", "West", "Don", "field", "during", "the", "first", "half", "of", "the", "year", "less", "than", "a", "year", "from", "Field", "Development", "Programme", "approval", "."], ["In", "addition", "output", "from", "Don", "Southwest", "field", "began", "in", "June", "."], ["Despite", "considerably", "lower", "oil", "prices", "in", "2009", "compared", "to", "the", "prior", "year", ",", "Energy", "Developments", "'", "revenue", "reached", "almost", "US$", "250", "million", "(", "significantly", "higher", "than", "the", "US$", "153", "million", "of", "2008", ")", "due", "not", "only", "to", "the", "‘Don", "fields", "effect", "’", "but", "also", "a", "full", "year", "'s", "contribution", "from", "the", "Chergui", "gas", "plant", ",", "which", "began", "exports", "in", "August", "2008.In", "order", "to", "maximize", "the", "earnings", "potential", "of", "the", "division’s", "North", "Sea", "assets", ",", "including", "the", "Don", "assets", ",", "the", "group", "has", "demerged", "them", "providing", "its", "shareholders", "with", "shares", "in", "a", "newly", "listed", "independent", "exploration", "and", "production", "company", "called", "EnQuest", "(", "LON:ENQ", ")", "."], ["EnQuest", "is", "a", "product", "of", "the", "Petrofac’s", "North", "Sea", "Assets", "with", "those", "off", "of", "Swedish", "explorer", "Lundin", "with", "both", "companies", "divesting", "for", "different", "reasons", "."], ["Upon", "listing", "(", "April", "6th", ")", ",", "Petrofac", "(", "LON:PFC)", "shareholders", "owned", "around", "45", "%", "of", "the", "new", "EnQuest", "entity", "with", "Lundin", "shareholders", "owning", "approximately", "55", "%", "."], ["It", "is", "important", "to", "note", "that", "post", "demerger", "the", "Energy", "Developments", "business", "unit", "is", "still", "a", "key", "constituent", "of", "Petrofac", "'s", "business", "portfolio", ",", "and", "will", "continue", "to", "hold", "significant", "assets", "Tunisia", ",", "Malaysia", ",", "Algeria", "and", "Kyrgyz", "Republic", "-", "sandwiched", "between", "Kazakhstan", "and", "China", "."]]
