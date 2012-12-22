@@ -10,10 +10,6 @@ module OpenNLP::Bindings
   require 'bind-it'
   extend BindIt::Binding
 
-  # The path in which to look for JAR files, with
-  # a trailing slash (default is gem's bin folder).
-  self.jar_path = File.dirname(__FILE__) + '/../../bin/'
-
   # Load the JVM with a minimum heap size of 512MB,
   # and a maximum heap size of 1024MB.
   self.jvm_args = ['-Xms512M', '-Xmx1024M']
@@ -34,6 +30,7 @@ module OpenNLP::Bindings
 
   # Default classes.
   self.default_classes = [
+    # OpenNLP classes.
     ['AbstractBottomUpParser', 'opennlp.tools.parser'],
     ['DocumentCategorizerME', 'opennlp.tools.doccat'],
     ['ChunkerME', 'opennlp.tools.chunker'],
@@ -46,7 +43,12 @@ module OpenNLP::Bindings
     ['SentenceDetectorME', 'opennlp.tools.sentdetect'],
     ['SimpleTokenizer', 'opennlp.tools.tokenize'],
     ['Span', 'opennlp.tools.util'],
-    ['TokenizerME', 'opennlp.tools.tokenize']
+    ['TokenizerME', 'opennlp.tools.tokenize'],
+    
+    # Generic Java classes.
+    ['FileInputStream', 'java.io'],
+    ['String', 'java.lang'],
+    ['ArrayList', 'java.util']
   ]
   
   # Add in Rjb workarounds.
@@ -54,14 +56,6 @@ module OpenNLP::Bindings
     self.default_jars << 'utils.jar'
     self.default_classes << ['Utils', '']
   end
-  
-  # Make the bindings.
-  self.bind
-
-  # Load utility classes.
-  self.load_class('FileInputStream', 'java.io')
-  self.load_class('String', 'java.lang')
-  self.load_class('ArrayList', 'java.util')
 
   # ############################ #
   #   OpenNLP bindings proper    #
@@ -78,11 +72,19 @@ module OpenNLP::Bindings
     attr_accessor :language
   end
 
+  def self.default_path
+    File.dirname(__FILE__) + '/../../bin/'
+  end
+
   # The loaded models.
   self.models = {}
 
   # The names of loaded models.
   self.model_files = {}
+
+  # The path in which to look for JAR files, with
+  # a trailing slash (default is gem's bin folder).
+  self.jar_path = self.default_path
 
   # The path to the main folder containing the folders
   # with the individual models inside. By default, this
