@@ -3,7 +3,6 @@
 This is an alpha release. Expect things to break and/or change in the near future! Also, keep the following in mind:
 
 - Currently, this gem is only tested on JRuby, but support for MRI through Rjb is coming very soon.
-- Currently, the parser and chunker classes are not working.
 
 **About**
 
