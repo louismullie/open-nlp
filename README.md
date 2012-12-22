@@ -8,7 +8,7 @@ This library provides high-level Ruby bindings to the Open NLP package, a Java m
 
 __Note: If you are running on MRI, this gem will use the Ruby-Java Bridge (Rjb), which currently does not support Java 7. Therefore, if you have installed Java 7, you should set your JAVA_HOME to point to your old Java 6 install before installing Rjb; for example, `export "JAVA_HOME=/usr/lib/jvm/java-6-openjdk/"`.__
 
-First, install the gem: `gem install open-nlp`. Then, individually download the appropriate models from the [open-nlp website](http://opennlp.sourceforge.net/models-1.5/) or just get [all english language models](louismullie.com/treat/open-nlp-english.zip) in one package (80 MB).
+First, install the gem: `gem install open-nlp`. Then, individually download the appropriate models from the [open-nlp website](http://opennlp.sourceforge.net/models-1.5/) or just get [all English language models](louismullie.com/treat/open-nlp-english.zip) in one package (80 MB).
 
 Place the contents of the extracted archive inside the /bin/ folder of the open-nlp gem (e.g. [...]/gems/open-nlp-0.x.x/bin/).
 
