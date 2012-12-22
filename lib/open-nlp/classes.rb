@@ -10,14 +10,25 @@ class OpenNLP::POSTaggerME < OpenNLP::Base; end
 
 class OpenNLP::ChunkerME < OpenNLP::Base
 
-  def chunk(tokens, tags)
-    if !tokens.is_a?(Array)
-      tokens = tokens.to_a
-      tags = tags.to_a
+  if RUBY_PLATFORM =~ /java/
+
+    def chunk(tokens, tags)
+      if !tokens.is_a?(Array)
+        tokens = tokens.to_a
+        tags = tags.to_a
+      end
+      tokens = tokens.to_java(:String)
+      tags = tags.to_java(:String)
+      @proxy_inst.chunk(tokens,tags).to_a
     end
-    tokens = tokens.to_java(:String)
-    tags = tags.to_java(:String)
-    @proxy_inst.chunk(tokens,tags)
+
+  else
+
+    def chunk(tokens, tags)
+      chunks = OpenNLP::Bindings::Utils.chunkWithArrays(@proxy_inst, tokens,tags)
+      chunks.map { |c| c.to_s }
+    end
+
   end
 
 end
