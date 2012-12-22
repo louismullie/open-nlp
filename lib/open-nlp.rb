@@ -21,5 +21,11 @@ module OpenNLP
   def const_missing(const)
     OpenNLP::Bindings.const_get(const)
   end
+  
+  # Forward the handling of missing 
+  # methods to the Bindings class.
+  def method_missing(sym, *args, &block)
+    OpenNLP::Bindings.send(sym, *args, &block)
+  end
 
 end
