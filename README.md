@@ -137,6 +137,19 @@ sentences.each do |sentence|
 end
 ```
 
+**Loading specific models**
+
+Just pass the name of the model file to the constructor. The gem will search for the file in the `OpenNLP.model_path` folder.
+
+```ruby
+OpenNLP.load
+
+tokenizer = OpenNLP::TokenizerME.new('en-token.bin')
+tagger = OpenNLP::POSTaggerME.new('en-pos-perceptron.bin')
+name_finder = OpenNLP::NameFinderME.new('en-ner-person.bin')
+# etc.
+```
+
 **Loading specific classes**
 
 You may want to load specific classes from the OpenNLP library that are not loaded by default. The gem provides an API to do this:
