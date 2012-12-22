@@ -31,48 +31,45 @@ class OpenNLP::Base
     self.class.to_s.split('::')[-1]
   end
 
-  def self.get_list(tokens)
-    list = OpenNLP::ArrayList.new
-    tokens.each do |t|
-      list.add(OpenNLP::String.new(t.to_s))
+
+  def method_missing(sym, *args, &block)
+    @proxy_inst.send(sym, *args, &block)
+  end
+  
+  unless RUBY_PLATFORM =~ /java/
+
+    def invoke_with_sig(sym, args)
+      @proxy_inst._invoke(sym.to_s, 'Ljava.lang.String;', *args)
     end
-    list
+
+    def tokenize(*args)
+      invoke_with_sig(:tokenize, args)
+    end
+
+    def sent_detect(*args)
+      invoke_with_sig(:sent_detect, args)
+    end
+
+    def tag(*args)
+      OpenNLP::Bindings::Utils
+      .tagWithArrayList(@proxy_inst, args[0])
+    end
+
+    def find(*args)
+      OpenNLP::Bindings::Utils
+      .findWithArrayList(@proxy_inst, args[0])
+    end
+
   end
 
   protected
 
-  if RUBY_PLATFORM =~ /java/
-
-    def method_missing(sym, *args, &block)
-      @proxy_inst.send(sym, *args, &block)
+  def get_list(tokens)
+    list = OpenNLP::Bindings::ArrayList.new
+    tokens.each do |t|
+      list.add(OpenNLP::Bindings::String.new(t.to_s))
     end
-
-  else
-
-    def method_missing(sym, *args, &block)
-      if sym == :tag
-        arg = Utils.getStringArray(args[0])
-        r = @proxy_inst.send(sym, arg)
-      else
-        r = @proxy_inst.send(sym, *args)
-      end
-      return r
-
-      r = nil
-      if [:sent_detect, :tokenize, :tag].include?(sym)
-        r = @proxy_inst._invoke(sym.to_s, 'Ljava.lang.String;', *args)
-      elsif sym == :find
-        r = @proxy_inst.send(sym, *args)
-      else
-        puts @proxy_inst.java_methods.inspect
-        puts sym.inspect
-      end
-      if [:tokenize].include?(sym)
-        r = OpenNLP.get_list(r)
-      end
-      return r
-    end
-
+    list
   end
 
 end
