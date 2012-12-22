@@ -24,10 +24,9 @@ module OpenNLP::Bindings
   # Default JARs to load.
   self.default_jars = [
     'jwnl-1.3.3.jar',
-    'opennlp-tools-1.5.2-incubating.jar',
+    'opennlp-tools-1.5.2-incubating.jar'
     'opennlp-maxent-3.0.2-incubating.jar',
-    'opennlp-uima-1.5.2-incubating.jar',
-    'utils.jar'
+    'opennlp-uima-1.5.2-incubating.jar'
   ]
 
   # Default namespace.
@@ -50,6 +49,12 @@ module OpenNLP::Bindings
     ['TokenizerME', 'opennlp.tools.tokenize']
   ]
   
+  # Add in Rjb workarounds.
+  unless RUBY_PLATFORM =~ /java/
+    self.default_jars << 'utils.jar'
+    self.default_classes << ['Utils', '']
+  end
+  
   # Make the bindings.
   self.bind
 
@@ -57,10 +62,6 @@ module OpenNLP::Bindings
   self.load_class('FileInputStream', 'java.io')
   self.load_class('String', 'java.lang')
   self.load_class('ArrayList', 'java.util')
-  self.load_class('Array', 'java.lang.reflect')
-  self.load_class('System', 'java.lang')
-  self.load_class('Arrays', 'java.util')
-  self.load_class('Utils', '')
 
   # ############################ #
   #   OpenNLP bindings proper    #
@@ -122,7 +123,7 @@ module OpenNLP::Bindings
     path = self.model_path + file
     stream = FileInputStream.new(path)
     klass = OpenNLP::Config::NameToClass[name]
-    load_class(*klass)
+    load_class(*klass) unless const_defined?(klass[0])
     klass = const_get(klass[0])
     model = klass.new(stream)
     self.model_files[name] = file
