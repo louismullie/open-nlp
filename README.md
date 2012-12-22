@@ -1,6 +1,4 @@
-**Warning**
-
-This is an alpha release. Expect things to break and/or change in the near future!
+[![Build Status](https://secure.travis-ci.org/louismullie/open-nlp.png)](http://travis-ci.org/louismullie/open-nlp)
 
 **About**
 
