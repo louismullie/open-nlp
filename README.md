@@ -1,12 +1,10 @@
 [![Build Status](https://secure.travis-ci.org/louismullie/open-nlp.png)](http://travis-ci.org/louismullie/open-nlp)
 
-**About**
+###About
 
-This library provides high-level Ruby bindings to the Open NLP package, a Java machine learning toolkit for natural language processing (NLP). 
+This library provides high-level Ruby bindings to the Open NLP package, a Java machine learning toolkit for natural language processing (NLP).
 
-This gem only provides a thin wrapper over the OpenNLP API. If you are looking for a Ruby natural language processing framework, have a look at [Treat](https://github.com/louismullie/treat).
-
-**Installing**
+###Installing
 
 __Note: If you are running on MRI, this gem will use the Ruby-Java Bridge (Rjb), which currently does not support Java 7. Therefore, if you have installed Java 7, you should set your JAVA_HOME to point to your old Java 6 install before installing Rjb; for example, `export "JAVA_HOME=/usr/lib/jvm/java-6-openjdk/"`.__
 
@@ -14,16 +12,23 @@ First, install the gem: `gem install open-nlp`. Then, individually download the 
 
 Place the contents of the extracted archive inside the /bin/ folder of the open-nlp gem (e.g. [...]/gems/open-nlp-0.x.x/bin/).
 
-**Configuration**
+Alternatively, from a terminal window, `cd` to the gem's folder and run:
 
-After installing and requiring the gem (`require 'open-nlp'`), you may want to set some optional configuration options. Here are some examples:
+```
+wget http://www.louismullie.com/treat/open-nlp-english.zip
+unzip -o open-nlp-english.zip -d bin/
+```
+
+###Configuring
+
+After installing and requiring the gem (`require 'open-nlp'`), you may want to set some of the following configuration options.
 
 ```ruby
-# Set an alternative path to look for the JAR files
+# Set an alternative path to look for the JAR files.
 # Default is gem's bin folder.
 OpenNLP.jar_path = '/path_to_jars/'
 
-# Set an alternative path to look for the model files
+# Set an alternative path to look for the model files.
 # Default is gem's bin folder.
 OpenNLP.model_path = '/path_to_models/'
 
@@ -34,76 +39,118 @@ OpenNLP.jvm_args = ['-option1', '-option2']
 # Redirect VM output to log.txt
 OpenNLP.log_file = 'log.txt'
 
-# WARNING: Not implemented yet.
-
-# Use the model files for a different language than English.
-# OpenNLP.use(:french) # or :german
-# 
-# Change a specific model file.
-# OpenNLP.set_model('pos.model', 'english-left3words-distsim.tagger')
 ```
 
-**Using the gem**
+###Examples
+
+
+**Simple tokenizer**
 
 ```ruby
-text = 'Angela Merkel met Nicolas Sarkozy on January 25th in ' +
-       'Berlin to discuss a new $25 billion austerity package.' +
-       'Sarkozy looked pleased, but Merkel was dismayed.'
+OpenNLP.load
+
+sent = "The death of the poet was kept from his poems."
+tokenizer = OpenNLP::SimpleTokenizer.new
+
+tokens = tokenizer.tokenize(sent).to_a
+# => %w[The death of the poet was kept from his poems .]
+```
+
+**Maximum entropy tokenizer, chunker and POS tagger**
+
+```ruby
+
+OpenNLP.load
+
+chunker   = OpenNLP::ChunkerME.new
+tokenizer = OpenNLP::TokenizerME.new
+tagger    = OpenNLP::POSTaggerME.new
+
+sent   = "The death of the poet was kept from his poems."
+
+tokens = tokenizer.tokenize(sent).to_a
+# => %w[The death of the poet was kept from his poems .]
+
+tags   = tagger.tag(tokens).to_a
+# => %w[DT NN IN DT NN VBD VBN IN PRP$ NNS .]
+
+chunks = chunker.chunk(tokens, tags).to_a
+# => %w[B-NP I-NP B-PP B-NP I-NP B-VP I-VP B-PP B-NP I-NP O]
+```
+
+**Abstract Bottom-Up Parser**
+
+```ruby
+OpenNLP.load
+
+sent      = "The death of the poet was kept from his poems."
+parser = OpenNLP::Parser.new
+parse = parser.parse(sent)
+
+parse.get_text.should eql sent
+
+parse.get_span.get_start.should eql 0
+parse.get_span.get_end.should eql 46
+parse.get_child_count.should eql 1
+
+child = parse.get_children[0]
+
+child.text # => "The death of the poet was kept from his poems."
+child.get_child_count # => 3
+child.get_head_index #=> 5
+child.get_type # => "S"
+```
+
+**Maximum Entropy Name Finder***
+
+```ruby
+OpenNLP.load
+
+text = File.read('./spec/sample.txt').gsub!("\n", "")
 
 tokenizer   = OpenNLP::TokenizerME.new
 segmenter   = OpenNLP::SentenceDetectorME.new
-tagger      = OpenNLP::POSTaggerME.new
 ner_models  = ['person', 'time', 'money']
 
 ner_finders = ner_models.map do |model|
- OpenNLP::NameFinderME.new("en-ner-#{model}.bin")
+  OpenNLP::NameFinderME.new("en-ner-#{model}.bin")
 end
 
 sentences = segmenter.sent_detect(text)
-all_entities = []
+named_entities = []
 
 sentences.each do |sentence|
 
- tokens = tokenizer.tokenize(sentence)
- tags   = tagger.tag(tokens)
- 
- # Get a list of all tokens.
- puts tokens.to_a.inspect
- # Get the sentence's text.
- puts sentence.to_s.inspect
- # Get the sentence's tags.
- puts tags.to_a.inspect
-
- # Run three NER models and find entities.
- ner_models.each_with_index do |model,i|
-   finder = ner_finders[i]
-   name_spans = finder.find(tokens)
-   name_spans.each do |name_span|
-     start = name_span.get_start
-     stop  = name_span.get_end-1
-     slice = tokens[start..stop].to_a
-     all_entities << [slice, model]
-   end
- end
+  tokens = tokenizer.tokenize(sentence)
+  
+  ner_models.each_with_index do |model,i|
+    finder = ner_finders[i]
+    name_spans = finder.find(tokens)
+    name_spans.each do |name_span|
+      start = name_span.get_start
+      stop  = name_span.get_end-1
+      slice = tokens[start..stop].to_a
+      named_entities << [slice, model]
+    end
+  end
 
 end
-
-# Show all named entities.
-puts all_entities.inspect
 ```
 
 **Loading specific classes**
 
-You may also want to load your own classes from the Stanford NLP to do more specific tasks. The gem provides an API to do this:
+You may want to load specific classes from the OpenNLP library that are not loaded by default. The gem provides an API to do this:
 
 ```ruby
 # Default base class is opennlp.tools.
 OpenNLP.load_class('SomeClassName')  
+# => OpenNLP::SomeClassName
 
 # Here, we specify another base class.
-OpenNLP.load_class('SomeOtherClass', 'opennlp.tools.namefind') 
+OpenNLP.load_class('SomeOtherClass', 'opennlp.tools.namefind')
+# => OpenNLP::SomeOtherClass
 ```
 
 **Contributing**
 
-Feel free to fork the project and send me a pull request!
+Fork the project and send me a pull request! Config updates for other languages are welcome.
