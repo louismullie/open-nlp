@@ -17,11 +17,10 @@ describe OpenNLP do
   
   context "when a class is loaded through the #load_class method" do
     it "loads the class and allows to access it through the global namespace" do
-      OpenNLP.load_class('AbstractBottomUpParser', 'opennlp.tools.parser')
-      expect { OpenNLP::AbstractBottomUpParser }.not_to raise_exception
+      OpenNLP.load_class('ChunkSample', 'opennlp.tools.chunker')
+      expect { OpenNLP::ChunkSample }.not_to raise_exception
     end
   end
-
 
   context "the maximum entropy chunker is run after tokenization and POS tagging" do
     it "should find the accurate chunks" do
