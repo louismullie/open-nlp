@@ -1,7 +1,7 @@
 module OpenNLP
 
   # Library version.
-  VERSION = '0.1.0'
+  VERSION = '0.1.1'
 
   # Require Java bindings.
   require 'open-nlp/bindings'
