@@ -40,7 +40,6 @@ describe OpenNLP do
       child = parse.get_children[0]
 
       child.text.should eql "The death of the poet was kept from his poems."
-      child.chunk.should eql false
       child.get_child_count.should eql 3
       child.get_head_index.should eql 5
 
