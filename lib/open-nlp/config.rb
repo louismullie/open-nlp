@@ -30,18 +30,34 @@ module OpenNLP::Config
       english: 'en-detokenizer.xml'
     },
     # Intentionally left empty.
+    # Available for English, Spanish, Dutch.
     name_finder: {},
     parser: {
       english: 'en-parser-chunking.bin'
     },
     pos_tagger: { 
-      english: 'en-pos-maxent.bin'
+      english: 'en-pos-maxent.bin',
+      danish: 'da-pos-maxent.bin',
+      german: 'de-pos-maxent.bin',
+      dutch: 'nl-pos-maxent.bin',
+      portuguese: 'pt-pos-maxent.bin',
+      swedish: 'se-pos-maxent.bin'
     },
     sentence_detector: {
-      english: 'en-sent.bin'
+      english: 'en-sent.bin',
+      german: 'de-sent.bin',
+      danish: 'da-sent.bin',
+      dutch: 'nl-sent.bin',
+      portuguese: 'pt-sent.bin',
+      swedish: 'se-sent.bin'
     },
     tokenizer: {
-      english: 'en-token.bin'
+      english: 'en-token.bin',
+      danish: 'da-token.bin',
+      german: 'de-token.bin',
+      dutch: 'nl-token.bin',
+      portuguese: 'pt-token.bin',
+      swedish: 'se-token.bin'
     }
   }
 
