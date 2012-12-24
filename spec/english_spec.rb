@@ -29,8 +29,8 @@ describe OpenNLP do
       
       OpenNLP.models[:pos_tagger].get_pos_model.to_s
       .index('opennlp.perceptron.PerceptronModel').should_not be_nil
-      
-      tags.should eql ["DT", "NN", "IN", "DT", "NN", "VBD", "VBN", "IN", "PRP$", "NNS", "."]
+
+      tags.to_a.should eql ["DT", "NN", "IN", "DT", "NN", "VBD", "VBN", "IN", "PRP$", "NNS", "."]
 
     end
   end
