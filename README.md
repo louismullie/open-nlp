@@ -37,6 +37,8 @@ OpenNLP.jvm_args = ['-option1', '-option2']
 # Redirect VM output to log.txt
 OpenNLP.log_file = 'log.txt'
 
+# Set default models for a language.
+OpenNLP.use :language
 ```
 
 ###Examples
