@@ -2,7 +2,7 @@
 
 ###About
 
-This library provides high-level Ruby bindings to the Open NLP package, a Java machine learning toolkit for natural language processing (NLP). This gem is compatible with Ruby 1.9.2 and 1.9.3 as well as JRuby 1.7.1.
+This library provides high-level Ruby bindings to the Open NLP package, a Java machine learning toolkit for natural language processing (NLP). This gem is compatible with Ruby 1.9.2 and 1.9.3 as well as JRuby 1.7.1. It is tested on both Java 6 and Java 7.
 
 ###Installing
 
