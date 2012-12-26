@@ -6,7 +6,7 @@ This library provides high-level Ruby bindings to the Open NLP package, a Java m
 
 ###Installing
 
-First, install the gem: `gem install open-nlp`. Then, individually download the appropriate models from the [open-nlp website](http://opennlp.sourceforge.net/models-1.5/) or just get [all English language models](louismullie.com/treat/open-nlp-english.zip) in one package (80 MB).
+First, install the gem: `gem install open-nlp`. Then, download [the JARs and English language models](http://louismullie.com/treat/open-nlp-english.zip) in one package (80 MB).
 
 Place the contents of the extracted archive inside the /bin/ folder of the open-nlp gem (e.g. [...]/gems/open-nlp-0.x.x/bin/).
 
@@ -16,6 +16,8 @@ Alternatively, from a terminal window, `cd` to the gem's folder and run:
 wget http://www.louismullie.com/treat/open-nlp-english.zip
 unzip -o open-nlp-english.zip -d bin/
 ```
+
+Afterwards, you may individually download the appropriate models for other languages from the [open-nlp website](http://opennlp.sourceforge.net/models-1.5/).
 
 ###Configuring
 
