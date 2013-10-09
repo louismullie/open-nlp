@@ -12,10 +12,9 @@ class OpenNLP::POSTaggerME < OpenNLP::Base
     def tag(*args)
         @proxy_inst._invoke("tag", "[Ljava.lang.String;", args[0])
     end
-
   end
-end
 
+end
 
 class OpenNLP::ChunkerME < OpenNLP::Base
 
