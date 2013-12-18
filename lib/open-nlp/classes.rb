@@ -7,13 +7,13 @@ class OpenNLP::SimpleTokenizer < OpenNLP::Base; end
 class OpenNLP::TokenizerME < OpenNLP::Base; end
 
 class OpenNLP::POSTaggerME < OpenNLP::Base
-    
+
   unless RUBY_PLATFORM =~ /java/
     def tag(*args)
-      OpenNLP::Bindings::Utils.tagWithArrayList(@proxy_inst, args[0])
+        @proxy_inst._invoke("tag", "[Ljava.lang.String;", args[0])
     end
   end
-  
+
 end
 
 class OpenNLP::ChunkerME < OpenNLP::Base
@@ -33,7 +33,7 @@ class OpenNLP::ChunkerME < OpenNLP::Base
   else
 
     def chunk(tokens, tags)
-      chunks = OpenNLP::Bindings::Utils.chunkWithArrays(@proxy_inst, tokens,tags)
+      chunks = @proxy_inst._invoke("chunk", "[Ljava.lang.String;[Ljava.lang.String;", tokens, tags)
       chunks.map { |c| c.to_s }
     end
 
@@ -70,8 +70,7 @@ end
 class OpenNLP::NameFinderME < OpenNLP::Base
   unless RUBY_PLATFORM =~ /java/
     def find(*args)
-      OpenNLP::Bindings::Utils
-      .findWithArrayList(@proxy_inst, args[0])
+      @proxy_inst._invoke("find", "[Ljava.lang.String;", args[0])
     end
   end
 end
