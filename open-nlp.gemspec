@@ -1,6 +1,6 @@
 $:.push File.expand_path('../lib', __FILE__)
 
-require 'open-nlp'
+require 'open-nlp/version'
 
 Gem::Specification.new do |s|
 
