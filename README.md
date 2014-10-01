@@ -128,11 +128,13 @@ sentences.each do |sentence|
   ner_models.each_with_index do |model,i|
     finder = ner_finders[i]
     name_spans = finder.find(tokens)
-    name_spans.each do |name_span|
+    name_probs = finder.probs()
+    name_spans.each_with_index do |name_span,j|
       start = name_span.get_start
       stop  = name_span.get_end-1
       slice = tokens[start..stop].to_a
-      named_entities << [slice, model]
+      prob  = name_probs[j]
+      named_entities << [slice, model, prob]
     end
   end
 

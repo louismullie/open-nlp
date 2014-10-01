@@ -72,5 +72,8 @@ class OpenNLP::NameFinderME < OpenNLP::Base
     def find(*args)
       @proxy_inst._invoke("find", "[Ljava.lang.String;", args[0])
     end
+    def prob(*args)
+      @proxy_inst._invoke("probs")
+    end
   end
 end
