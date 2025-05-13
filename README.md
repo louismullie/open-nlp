@@ -1,4 +1,4 @@
-**Warning:** this packagee is unmaintained.
+**Warning:** this package is unmaintained.
 
 ### About
 
