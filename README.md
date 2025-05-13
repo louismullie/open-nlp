@@ -1,10 +1,10 @@
-[![Build Status](https://secure.travis-ci.org/louismullie/open-nlp.png)](http://travis-ci.org/louismullie/open-nlp)
+**Warning:** this packagee is unmaintained.
 
-###About
+### About
 
 This library provides high-level Ruby bindings to the Open NLP package, a Java machine learning toolkit for natural language processing (NLP). This gem is compatible with Ruby 1.9.2 and 1.9.3 as well as JRuby 1.7.1. It is tested on both Java 6 and Java 7.
 
-###Installing
+### Installing
 
 First, install the gem: `gem install open-nlp`. Then, download [the JARs and English language models](http://louismullie.com/treat/open-nlp-english.zip) in one package (80 MB).
 
@@ -19,7 +19,7 @@ unzip -o open-nlp-english.zip -d bin/
 
 Afterwards, you may individually download the appropriate models for other languages from the [open-nlp website](http://opennlp.sourceforge.net/models-1.5/).
 
-###Configuring
+### Configuring
 
 After installing and requiring the gem (`require 'open-nlp'`), you may want to set some of the following configuration options.
 
@@ -43,7 +43,7 @@ OpenNLP.log_file = 'log.txt'
 OpenNLP.use :language
 ```
 
-###Examples
+### Examples
 
 
 **Simple tokenizer**
